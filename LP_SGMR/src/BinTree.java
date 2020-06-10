@@ -14,8 +14,8 @@ public interface BinTree {
 	 * @param num  número a inserir
 	 * @throws IllegalArgumentException  se já existir o 'num' na árvore
 	 */
-	public void inserir(int num);
-
+	 void inserir(int num);
+	 void atribuirMesa(int num);
 	/**
 	 * Procura um determinado numero na arvore
 	 * 

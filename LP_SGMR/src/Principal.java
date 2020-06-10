@@ -16,15 +16,13 @@ public class Principal {
 		b.inserir(3);
 		b.inserir(50);
 		b.inserir(70);
-
-
-		System.out.println(b);
-		System.out.println("---------------");
-		System.out.println(b.procurar(3));
+		System.out.println("antes"+b);
+		b.atribuirMesa(50);
+		System.out.println("depois"+b);
 		System.out.println("---------------");
 		System.out.println("preORder"+b.preOrdem());
-		System.out.println("INorder"+b.inOrdem());
-		System.out.println("INorder"+b.posOrdem());
+
+
 	/*	JFrame janela= new JFrame("Restaurante");
 		JPanel panel = new JPanel(new BorderLayout());
 		JPanel panel1 = new JPanel();

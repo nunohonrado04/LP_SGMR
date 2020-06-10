@@ -41,10 +41,13 @@ public class NoBinTree {
 
 	// Construtores
 	public NoBinTree(int nrMesa) {
-		this.nrMesa = nrMesa;
+		this.nrMesa=nrMesa;
+		this.hora=null;
 		this.filhoEsquerda = null;
 		this.filhoDireita = null;
 	}
+
+
 
 	public int altura()
 	{

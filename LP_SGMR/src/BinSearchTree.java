@@ -1,30 +1,37 @@
 import java.time.LocalDateTime;
-import java.util.Queue;
 
 public class BinSearchTree implements BinTree {
 
 	private NoBinTree raiz;
 
+	@Override
+	public void atribuirMesa(int valor) {
+		if (procurar(valor) == null) {
+			throw new IllegalArgumentException("não existe a mesa!");
+		}
+		procurar(valor).setHora(LocalDateTime.now());
+	}
+
 	// M�todos da Interface BinTree
 	@Override
 	public void inserir(int num) {
 
-		raiz = inserir(raiz, num);
-
+		raiz=inserirV(raiz,num);
 	}
-
-	private NoBinTree inserir(NoBinTree no, int num) {
-		if (no == null) {
-			return new NoBinTree(num);
+	private  NoBinTree inserirV(NoBinTree raiz,int num) {
+		if (raiz == null) {
+			raiz = new NoBinTree(num);
+			return raiz;
 		}
-
-		if (num < no.getNrMesa()) {
-			no.setFilhoEsquerda(inserir(no.getFilhoEsquerda(), num));
-		} else if (num > no.getNrMesa()) {
-			no.setFilhoDireita(inserir(no.getFilhoDireita(), num));
+		if(raiz.getNrMesa()==num){
+			throw new IllegalArgumentException("ja existe");
 		}
-
-		return no;
+		if (num < raiz.getNrMesa()) {
+			raiz.setFilhoEsquerda(inserirV(raiz.getFilhoEsquerda(),num));
+		} else if (num > raiz.getNrMesa()) {
+			raiz.setFilhoDireita(inserirV(raiz.getFilhoDireita(), num));
+		}
+		return raiz;
 	}
 
 	@Override
@@ -53,36 +60,36 @@ public class BinSearchTree implements BinTree {
 	}
 
 
-	public ListaFila preOrdem() {
+	public Lista preOrdem() {
 		if (raiz == null) {
-			return "arvore vazia";
+			return null;
 		}
 		return preOrdem(raiz);
 	}
 
 	public Lista preOrdem(NoBinTree no) {
 		Lista listaOrdemChegada= new Lista();
-
+		String retorno="";
 		if(no != null) {
 			if(listaOrdemChegada.estaVazia()){
 				listaOrdemChegada.insert(no);
 			}
 
-			retorno += no.getNrMesa() + " ";
+		 retorno += no.getHora() + " ";
 		}
-		
+
 		if(no.getFilhoEsquerda() != null) {
 			retorno += preOrdem(no.getFilhoEsquerda());
 		}
-		
+
 		if(no.getFilhoDireita() != null) {
 			retorno += preOrdem(no.getFilhoDireita());
 		}
 
 		if(listaOrdemChegada.estaVazia()){
-
+			throw new IllegalArgumentException("Não existe mesas ocupadas");
 		}
-		return retorno;
+		return listaOrdemChegada;
 	}
 
 	public String inOrdem() {
@@ -100,7 +107,7 @@ public class BinSearchTree implements BinTree {
 			retorno += inOrdem(no.getFilhoEsquerda());
 		}
 		
-		retorno += no.getNrMesa() + " ";
+		retorno += no.getHora() + " ";
 		
 		if(no.getFilhoDireita() != null) {
 			retorno += inOrdem(no.getFilhoDireita());
@@ -128,7 +135,7 @@ public class BinSearchTree implements BinTree {
 			retorno += posOrdem(no.getFilhoDireita());
 		}
 		
-		retorno += no.getNrMesa() + " ";
+		retorno += no.getHora() + " ";
 		
 		return retorno;
 	}
