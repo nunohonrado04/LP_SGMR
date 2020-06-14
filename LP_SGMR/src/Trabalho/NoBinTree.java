@@ -6,6 +6,8 @@ public class NoBinTree
 {
 	private int valor;
 	private LocalTime hora;
+	private boolean marcada;
+	private boolean ocupada;
 	private NoBinTree filhoEsquerda;
 	private NoBinTree filhoDireita;
 
@@ -21,6 +23,18 @@ public class NoBinTree
 	}
 	public void setHora(LocalTime hora) {
 		this.hora = hora;
+	}
+	public boolean isMarcada() {
+		return marcada;
+	}
+	public void setMarcada(boolean marcada) {
+		this.marcada = marcada;
+	}
+	public boolean isOcupada() {
+		return ocupada;
+	}
+	public void setOcupada(boolean ocupada) {
+		this.ocupada = ocupada;
 	}
 	public NoBinTree getFilhoEsquerda() {
 		return filhoEsquerda;
@@ -40,6 +54,8 @@ public class NoBinTree
 	public NoBinTree(int valor) {
 		this.valor = valor;
 		this.hora = null;
+		this.marcada = false;
+		this.ocupada = false;
 		this.filhoEsquerda = null;
 		this.filhoDireita = null;
 	}

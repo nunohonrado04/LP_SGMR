@@ -2,6 +2,7 @@ package Trabalho;
 
 import java.time.LocalTime;
 import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class BinSearchTree 
@@ -52,6 +53,51 @@ public class BinSearchTree
 			}		
 	}
 	
+	// -------------------------------------------- EliminarMesa -------------------------------------------------
+	public void EliminarMesa(int num)
+	{
+		raiz = eliminar(raiz, num);
+	}
+	
+	private NoBinTree eliminar(NoBinTree no, int num)
+	{
+		if(no == null) {
+			return no;
+		}
+		
+		if(num < no.getValor()) {
+			no.setFilhoEsquerda(eliminar(no.getFilhoEsquerda(), num));
+		} else if(num > no.getValor()) {
+			no.setFilhoDireita(eliminar(no.getFilhoDireita(), num));
+		}else {
+			
+			if(no.getFilhoEsquerda() == null) {
+				return no.getFilhoDireita();
+			}else if(no.getFilhoDireita() == null) {
+				return no.getFilhoEsquerda();
+			}
+
+			no.setValor(min(no.getFilhoDireita()));
+			no.setFilhoDireita(eliminar(no.getFilhoDireita(), no.getValor()));
+		}
+
+		return no;
+	}
+	
+	public int min()
+	{
+		return min(raiz);
+	}
+	
+	private int min(NoBinTree no)
+	{
+		if(no.getFilhoEsquerda() == null) 
+		{
+			return no.getValor();
+		}
+		
+		return min(no.getFilhoEsquerda());
+	}
 	// -------------------------------------------- Procurar -------------------------------------------------
 	public NoBinTree procurar( int num ) 
 	{
@@ -87,12 +133,10 @@ public class BinSearchTree
 	// -------------------------------------------- PreOrder -------------------------------------------------
 	private void visita( NoBinTree no, LinkedList<NoBinTree> nosVisitados, Lista ordemChegada )
 	{
-		//System.out.println(no.getHora());
+		
 		if(no.getHora()!=null) {
-			//System.out.println("\nNão é null");
 			ordemChegada.push(no);
 		}
-		//System.out.println("\nÉ null");
 		nosVisitados.add(no);
 	}
 
@@ -118,64 +162,132 @@ public class BinSearchTree
 		
 	}
 	// -------------------------------------------- InserirComDistanciaEntreMesas -------------------------------------
-	public void inserirComDistanciaEntreMesas(NoBinTree no)
+	public void inserirComDistanciaEntreMesas()
 	{
-		if( raiz == null ) 
+		if( raiz.getHora() == null ) 
 		{
-			NoBinTree novo = new NoBinTree(no.getValor());
-			raiz = novo;
+			LocalTime hora = LocalTime.now();
+			raiz.setHora(hora);
 		}
 		else
-			inserirComDistanciaEntreMesas(no.getValor(), raiz);
-	}
-	
-	private void inserirComDistanciaEntreMesas( int num, NoBinTree pai ) 
-	{
-		if( pai.getValor() > num ) 
 		{
-			// Segue pela esquerda
-			if( pai.getFilhoEsquerda().getHora() == null) 
+			if(raiz.getFilhoEsquerda().getHora()==null && raiz.getFilhoEsquerda().getFilhoEsquerda().getHora()==null || raiz.getFilhoDireita().getFilhoDireita().getHora()==null)
 			{
-				
-				NoBinTree novo = new NoBinTree(num);
-				NoBinTree atual = pai.getFilhoEsquerda();
-				atual.setFilhoEsquerda(novo);
+				raiz = raiz.getFilhoEsquerda();
 			}
+			else if(raiz.getFilhoDireita().getHora()==null && raiz.getFilhoEsquerda().getFilhoEsquerda().getHora()==null || raiz.getFilhoDireita().getFilhoDireita().getHora()==null)
+			{
+				raiz = raiz.getFilhoDireita();
+			}
+			else {
+				throw new IllegalArgumentException("Distância não cumprida!");
+			}
+			
+			inserirComDistanciaEntreMesas(raiz);
 		}
-		else if(  pai.getValor() < num ) 
-			{
-				// Segue pela direita
-				if( pai.getFilhoDireita().getHora() == null) 
-				{
-					NoBinTree novo = new NoBinTree(num);
-					NoBinTree atual = pai.getFilhoDireita();
-					atual.setFilhoDireita(novo);
-				}
-			}
 	}
 	
+	private void inserirComDistanciaEntreMesas(NoBinTree pai ) 
+	{
+		if(pai.getFilhoEsquerda().getHora()==null)
+		{
+			LocalTime hora = LocalTime.now();
+			pai.getFilhoEsquerda().setHora(hora);
+		}else if(pai.getFilhoDireita().getHora()==null)
+		{
+			LocalTime hora = LocalTime.now();
+			pai.getFilhoDireita().setHora(hora);
+		}
+	}
+	
+	// -------------------------------------------- PreOrderOcupacao -------------------------------------------------
+		private void visitaOcupacao( NoBinTree no, LinkedList<NoBinTree> nosVisitados )
+		{
+			nosVisitados.add(no);
+		}
+
+		public void preOrderOcupacao() 
+		{
+			LinkedList<NoBinTree> nosVisitados = new LinkedList<NoBinTree>();
+			
+			preOrderOcupacao(raiz, nosVisitados);
+			
+		}
+		
+		private void preOrderOcupacao( NoBinTree no, LinkedList<NoBinTree> nosVisitados )
+		{
+			if( no == null)
+				return;
+			
+			visitaOcupacao(no, nosVisitados);
+			preOrderOcupacao( no.getFilhoEsquerda(), nosVisitados);
+			preOrderOcupacao( no.getFilhoDireita(), nosVisitados);
+			
+		}
 	// -------------------------------------------- InserirCliente -------------------------------------
 	public void inserirCliente(int numMesa)
 	{
 		NoBinTree no = procurar(numMesa);
-		System.out.println(no);
 		if(no!=null) 
 		{
 			if(no.getHora()==null) 
 			{
-				//System.out.println("Não é null");
 				LocalTime hora = LocalTime.now();
 				
 				no.setHora(hora);
-				//System.out.println(no.getHora());
 			}
-			//System.out.println("É null");
 		}
 	}
 	
-	// -------------------------------------------- toString -------------------------------------------------
-	@Override
-	public String toString() {
-		return "BinSearchTree [raiz=" + raiz + "]";
-	}
+	// -------------------------------------------- MarcarMesa -------------------------------------
+		public void marcarMesa(int numMesa)
+		{
+			if(procurar(numMesa)!=null) {
+				NoBinTree no = procurar(numMesa);
+				if(no.getHora()==null) {
+					if(!no.isMarcada()) {
+						no.setMarcada(true);
+					}
+					else
+					{
+						throw new IllegalArgumentException("Esta mesa já se encontra marcada.");
+					}
+				}
+			}
+		}
+		
+	// -------------------------------------------- DesenharArvore -------------------------------------------------
+  
+		public void desenharArvore() 
+		{
+			imprimir(raiz);
+		}
+		
+		private static void imprimirArvore(NoBinTree raiz, int space)  
+		{  
+			int COUNT = 10;
+		      
+		    if (raiz == null)  
+		        return;  
+		  
+		    space += COUNT;  
+		  
+		    
+		    imprimirArvore(raiz.getFilhoDireita(), space);  
+		   
+		    System.out.print("\n");  
+		    for (int i = COUNT; i < space; i++)  
+		        System.out.print(" ");  
+		    System.out.print("["+raiz.getValor() + "]\n");  
+		    
+		    imprimirArvore(raiz.getFilhoEsquerda(), space);  
+		}  
+		  
+		 
+		private static void imprimir(NoBinTree raiz)  
+		{    
+		    imprimirArvore(raiz, 0);  
+		}  
+		  
+	
 }

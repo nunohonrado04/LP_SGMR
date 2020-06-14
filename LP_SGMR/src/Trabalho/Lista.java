@@ -1,6 +1,5 @@
 package Trabalho;
 
-import java.time.LocalTime;
 
 public class Lista {
 	Celula inicio; 
@@ -28,11 +27,10 @@ public class Lista {
   
     private void sortedInsert(Celula newnode)  
     { 
-    	System.out.println(sorted.no.getHora()); 
-    	
+    	 	
 	    
     
-        if (sorted == null || sorted.no.getValor()<= newnode.no.getValor())   //<=
+        if (sorted == null || sorted.no.getHora().isBefore(newnode.no.getHora()))   //<=
         { 
             newnode.next = sorted; 
             sorted = newnode; 
@@ -40,7 +38,7 @@ public class Lista {
         else 
         { 
         	Celula current = sorted;
-            while (current.next != null && current.next.no.getValor() < newnode.no.getValor())  //<
+            while (current.next != null && current.next.no.getHora().isBefore(newnode.no.getHora())) //<
             { 
                 current = current.next; 
             } 
