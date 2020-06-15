@@ -8,6 +8,6 @@ public class Celula {
     public Celula(NoBinTree no)  
     { 
         this.no = no; 
-    } 
+    }//Celula
 
-}
+}//Celula
